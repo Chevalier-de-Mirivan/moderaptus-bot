@@ -5,8 +5,8 @@ token = '5033996376:AAGmQxjIZHx8g8083zGTj6pZ7vR_PZwEq9k'
 bot = telebot.TeleBot(token)
 GROUP_ID=bot.get_chat('@test_moderapt').id
 # Список запрещённых слов
-blaclist=['бля','хуй','пизд','пидар','сука','суки','пидр','пидор','сучка','сучон','гондон','ебат','ебл','ебал']
-momsave = ['мать твою ебал', 'еб твою мать','мамашу твою ебал', 'еб твою мамашу','мамку твою ебал', 'еб твою мамку',]
+blaclist=['бля','охуе','хуй','пизд','пидар','сука','суки','пидр','пидор','сучка','сучон','гондон','ебат','ебл','ебал']
+momsave = ['мать','мамк','мам','мамаш']
 
 
 @bot.message_handler(commands=['start'])
@@ -29,19 +29,21 @@ def start_message(message):
 
 # просмотр сообщений
 @bot.message_handler(content_types=["text"])
-def handle_text(message):
-	for x in momsave:
-		if(x in message.text):
-			bot.delete_message(message.chat.id, message.message_id)
-			bot.send_message(message.chat.id, "мама это святое, нельзя про неё так говорить")
-			break
-			
+def handle_text(message):			
 	for x in blaclist:
-		if(x in message.text):
-			# удаление сообщения с матом
-			bot.delete_message(message.chat.id, message.message_id)
-			bot.send_message(message.chat.id, " разговаривай без матов дуралей")
-			break
+		for y in momsave:
+			if(x in message.text):
+				if(y in message.text):
+					# удаление сообщения с матом и оскорблением матери
+					bot.delete_message(message.chat.id, message.message_id)
+					bot.send_message(message.chat.id, "мама это святое, нельзя про неё так говорить")
+					break
+				else:
+					# удаление сообщения с матом
+					bot.delete_message(message.chat.id, message.message_id)
+					bot.send_message(message.chat.id, " разговаривай без матов дуралей")
+					break
+			
 
 if __name__ == '__main__':
 	bot.infinity_polling()
